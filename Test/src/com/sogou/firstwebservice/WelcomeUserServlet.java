@@ -33,7 +33,23 @@ public class WelcomeUserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.setCharacterEncoding("UTF-8");
+		System.out.println("doget");
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		
+		if (name.equals("admin")&&password.equals("123456")) {
+			JSONObject rjson = new JSONObject();
+			rjson.put("json",true);
+			System.out.println("rjson="+rjson);
+			response.getOutputStream().write(rjson.toString().getBytes("UTF-8"));
+		}else {
+			JSONObject rjson = new JSONObject();
+			rjson.put("json", false);  
+            System.out.println("rjson=" + rjson);  
+            // response.getWriter().write(rjson.toString());//向客户端发送一个带有json对象内容的响应  
+            response.getOutputStream().write(rjson.toString().getBytes("UTF-8"));//向客户端发送一个带有json对象内容的响应
+		}
 	}
 
 	/**
@@ -42,6 +58,7 @@ public class WelcomeUserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
+		System.out.println("doPost");
 		//使用字节流读取发送过来的数据
 //		BufferedInputStream bis = new BufferedInputStream(request.getInputStream());
 //		byte[] buffer = new byte[1024];

@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Looper.prepare();
-                        httpUrlConnection("admin", "123456");
-
+//                        httpUrlConnection("admin", "123456");
+                        httpUrlConnGet("admin", "123456");
                         Looper.loop();
                     }
                 });
@@ -138,6 +138,42 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "认证失败", Toast.LENGTH_SHORT).show();
         } finally {
             connection.disconnect();//使用完关闭TCP连接，释放资源
+        }
+    }
+
+    public void httpUrlConnGet(String name, String password) {
+        HttpURLConnection urlConnection = null;
+        URL url = null;
+        try {
+            String urlStr = "http://10.129.233.57:8080/Test/WelcomeUserServlet?name="+name+"&password="+password;
+            url = new URL(urlStr);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.connect();
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream in = urlConnection.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                String line = null;
+                StringBuffer buffer = new StringBuffer();
+                while ((line = br.readLine()) != null) {
+                    buffer.append(line);
+                }
+                in.close();
+                br.close();
+                JSONObject newJson = new JSONObject(buffer.toString());
+
+                boolean result = newJson.getBoolean("json");//从rjson对象中得到key值为"json"的数据，这里服务端返回的是一个boolean类型的数据
+                if (result) {//判断结果是否正确
+                    Toast.makeText(MainActivity.this, "认证成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "认证失败", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(MainActivity.this, "认证失败", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(MainActivity.this, "认证失败", Toast.LENGTH_SHORT).show();
+        } finally {
+            urlConnection.disconnect();//使用完关闭TCP连接，释放资源
         }
     }
 
