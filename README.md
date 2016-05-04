@@ -1,0 +1,6 @@
+# HttpURLConnection
+这是一个使用HttpURLConnection进行登录验证的case
+1.在客户端我们使用了Post请求和get请求两种方式，分别使用了字节流和字符流来进行数据的发送的接收，为了优化频繁读取，使用BufferedOutputStream等
+2.注意URL的书写方式：http://服务器Ip地址：端口号/（server）project名/servlet类名
+3.关于JsonObject的使用，首先要将JsonObject使用所依赖的jar包导入，另外server端还要将上述jar包复制到tomcat的lib目录下
+4.注意doPost和doget方法的处理不同
